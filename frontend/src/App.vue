@@ -7,14 +7,17 @@
     >
       <v-spacer></v-spacer>
 
-      <v-btn
+      <v-btn v-if="!this.$session.get('auth')"
         outlined>
         <span class="mr-2" @click="dialog=!dialog">Im An Influencer</span>
+      </v-btn>
+      <v-btn v-if="this.$session.get('auth')"
+        outlined @click="signOut">
+        <span class="mr-2" >Sign Out</span>
       </v-btn>
     </v-app-bar>
 
     <v-content>
-
           <v-dialog
             v-model="dialog"
             max-width="290"
@@ -23,10 +26,10 @@
               <v-card-title class="headline">Login</v-card-title>
               <v-card-text class="text-center">
                <v-btn @click="signIn">Sign In With Google</v-btn>
-              </v-card-text>
-              
+              </v-card-text> 
             </v-card>
           </v-dialog>
+          <router-view></router-view>
     </v-content>
   </v-app>
 </template>
@@ -59,7 +62,10 @@ export default {
         .then(res=>{
           this.$session.start();
           this.$session.set("access_token",GoogleUser.uc.access_token);
-          this.$session.set("user",GoogleUser.Qt);
+          this.$session.set("user",res.data.data);
+          this.$session.set("auth",true);
+          this.dialog=false;
+          this.$router.push("/profile");
         })
         .catch(err=>{
           console.log(err);
@@ -68,6 +74,16 @@ export default {
       })
       .catch(error  => {
         console.log(error);
+      })
+    },
+    signOut(){
+      this.$gAuth.signOut()
+      .then(res=>{
+        this.$session.clear();
+        this.$router.push("/");
+      })
+      .catch(err=>{
+        console.log(err)
       })
     }
   },

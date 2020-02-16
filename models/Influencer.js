@@ -8,6 +8,7 @@ class Influencer{
         this.name=influencer.name;
         this.email=influencer.email;
         this.pict=influencer.pict;
+        this.instagram=influencer.instagram;
         if(typeof(influencer.interest==="object")){
             if(influencer.interest==null){
                 this.interest=JSON.stringify([]);
@@ -39,8 +40,8 @@ class Influencer{
     }
 
     save(callback=null){
-        const query=`INSERT INTO ${this.table}(name,email,interest,pict) VALUES (?,?,?,?)`;
-        connection.query(query,[this.name,this.email,this.interest,this.pict], function (error, results) {
+        const query=`INSERT INTO ${this.table}(name,email,interest,pict,instagram) VALUES (?,?,?,?,?)`;
+        connection.query(query,[this.name,this.email,this.interest,this.pict,this.instagram], function (error, results) {
             if(error){
                 callback(error,null);
             }else{

@@ -14,11 +14,11 @@ exports.auth=(req,res)=>{
                         res.status(500);
                         res.json({error:"Internal Server Error"}); 
                     }else{
-                        res.json({success:`Success Added Influencer ${influencer.name}`});
+                        res.json({success:`Success Added Influencer ${influencer.name}`,data:influencer});
                     }
                 });
             }else{
-                res.json({success:`Influencer ${influencer.name} Already Exists`});
+                res.json({success:`Influencer ${influencer.name} Already Exists`, data:result});
             }
         }
     });

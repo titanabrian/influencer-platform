@@ -8,6 +8,7 @@ import VueSession from 'vue-session';
 import axios from "axios";
 
 Vue.use(VueSession,{});
+
 let headers={
   'Accept':'*/*',
   'Authorization':""
@@ -38,6 +39,30 @@ const gauthOption = {
 Vue.use(GAuth, gauthOption);
 
 Vue.config.productionTip = false;
+
+/* eslint-disable no-new */
+router.beforeEach((to, from, next) => {
+  if (!to.meta.middleware) {
+      return next()
+  }
+  const middleware = to.meta.middleware
+
+  const context = {
+      to,
+      from,
+      next,
+      store
+  }
+  return middleware[0]({
+      ...context
+  })
+})
+
+Vue.directive('focus', {
+  inserted: function (el) {
+      el.getElementsByTagName("input")[0].focus()
+  }
+})
 
 new Vue({
   router,
