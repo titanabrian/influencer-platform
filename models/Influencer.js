@@ -64,6 +64,19 @@ class Influencer{
             }
         });
     }
+
+    getAll(callback=null){
+        const query=`SELECT * FROM ${this.table} WHERE instagram IS NOT NULL`;
+        connection.query(query, function (error, results) {
+            if(error){
+                callback(error,null);
+            }else{
+                if(callback){
+                    callback(null,results);
+                }
+            }
+        });
+    }
 }
 
 module.exports=Influencer;

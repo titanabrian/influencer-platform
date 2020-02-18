@@ -13,3 +13,15 @@ exports.update=(req,res)=>{
         }
     })
 }
+
+exports.getAll=(req,res)=>{
+    const influencer=new Influencer({});
+    let inf=influencer.getAll((err,result)=>{
+        if(err==null){
+            res.json({success:"Success Get Data",data:result})
+        }else{
+            res.status(500);
+            res.json({error:"Internal Server Error"})
+        }
+    })
+}

@@ -5,6 +5,13 @@
       color="primary"
       dark
     >
+      <div>
+        <v-select
+              :items="items"
+              label="Select Interest"
+              dense
+        ></v-select>
+      </div>
       <v-spacer></v-spacer>
 
       <v-btn v-if="!this.$session.get('auth')"
@@ -59,7 +66,8 @@ export default {
   },
 
   data: () => ({
-    dialog:false
+    dialog:false,
+    items:[]
   }),
 
   methods:{
