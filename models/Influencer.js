@@ -51,6 +51,19 @@ class Influencer{
             }
         });
     }
+
+    update(callback=null){
+        const query=`UPDATE ${this.table} SET name=?, instagram=?, interest=? WHERE email=?`;
+        connection.query(query,[this.name,this.instagram, this.interest, this.email], function (error, results) {
+            if(error){
+                callback(error,null);
+            }else{
+                if(callback){
+                    callback(null,{msg:"Success Update Data"});
+                }
+            }
+        });
+    }
 }
 
 module.exports=Influencer;

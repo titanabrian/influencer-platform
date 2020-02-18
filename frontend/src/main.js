@@ -6,8 +6,10 @@ import vuetify from './plugins/vuetify';
 import GAuth from 'vue-google-oauth2';
 import VueSession from 'vue-session';
 import axios from "axios";
+import notifications from 'vue-notification';
 
 Vue.use(VueSession,{});
+Vue.use(notifications);
 
 let headers={
   'Accept':'*/*',
@@ -18,17 +20,50 @@ Vue.prototype.$http=axios.create({
   baseURL:process.env.VUE_APP_SERVER,
   headers:headers
 });
+Vue.prototype.$http.interceptors.request.use((config)=>{
+  let authorization = JSON.parse(sessionStorage.getItem(VueSession.key))
+  if(authorization){
+    config.headers.Authorization="Bearer "+authorization.access_token;
+  }
+  return config;
+},(error)=>{
 
-// Vue.prototype.$http.interceptors.request.use((config)=>{
-//   let jwt = Vue.$cookies.get('jwt');
-//   if(jwt){
-//     let authorization = jwt.token_type+' '+jwt.access_token;
-//     config.headers.Authorization=authorization;
-//   }
-//   return config;
-// },(error)=>{
+})
 
-// })
+Vue.prototype.$http.interceptors.response.use((response)=>{
+  return response
+},
+(error)=>{
+  
+  let response = error.response
+  if(response.status===401){
+    router.push("/");
+  }else if(response.status===500 || response.status===404){
+    Vue.notify({
+      group:"error",
+      title:"Error Notification",
+      text:"Ops, terjadi kesalahan pada server"
+    })
+  }else if(response.status===422){
+
+    Vue.notify({
+      group:"error",
+      title:"Validation Error",
+      text:response.data.data
+    })
+
+  }else if(response.status===401){
+    Vue.notify({
+      group:"error",
+      title:"Unauthorized Request",
+      text:"Ops, pastikan anda telah melakukan Login"
+    })
+    Vue.$session.clear();
+    Vue.router.push("/")
+  }
+
+  return error;
+})
 
 const gauthOption = {
   clientId: '768834812579-rq7d2r3ne7am7imjnajenu670ounoi01.apps.googleusercontent.com',

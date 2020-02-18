@@ -1,5 +1,4 @@
 let axios = require("axios");
-var result;
 
 module.exports=async function(req,res,next){    
 

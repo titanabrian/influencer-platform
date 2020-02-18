@@ -11,7 +11,7 @@
         outlined>
         <span class="mr-2" @click="dialog=!dialog">Im An Influencer</span>
       </v-btn>
-      <v-btn v-if="this.$session.get('auth')"
+      <v-btn v-if="this.$session.get('auth')!=null"
         outlined @click="signOut">
         <span class="mr-2" >Sign Out</span>
       </v-btn>
@@ -31,6 +31,21 @@
           </v-dialog>
           <router-view></router-view>
     </v-content>
+    <notifications 
+    group="success"
+    classes="vue-notification success"
+    position="bottom right"
+    />
+    <notifications 
+    group="error"
+    classes="vue-notification error"
+    position="bottom right"
+    />
+    <notifications 
+    group="warning"
+    classes="vue-notification warn"
+    position="bottom right"
+    />
   </v-app>
 </template>
 
